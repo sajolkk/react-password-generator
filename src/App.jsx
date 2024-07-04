@@ -24,7 +24,14 @@ function App() {
     passwordGenerator();
   }, [passwordLength, isNumberAllowed, isSymbolAllowed])
 
-  
+  // password copy to clipboard function
+  const passwordCopyToClipBoard = useCallback(()=>{
+    // for select
+    passwordRef.current?.select();
+    // range select
+    passwordRef.current?.setSelectionRange(0, passwordLength)
+    window.navigator.clipboard.writeText(password);
+  }, [password]);
   return (
     <>
       <div className='h-screen w-full bg-black'>
@@ -39,7 +46,9 @@ function App() {
               readOnly
               ref={passwordRef}
             />
-            <button className='outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0'>Copy</button>
+            <button 
+              onClick={passwordCopyToClipBoard}
+              className='outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0 active:bg-blue-400 hover:bg-blue-800'>Copy</button>
           </div>
           <div className='flex text-sm gap-x-2 py-3'>
             <div className='flex items-center gap-x-1'>
@@ -50,6 +59,7 @@ function App() {
                 value={passwordLength}
                 className='cursor-pointer'
                 onChange={(e)=>{setPasswordLength(e.target.value)}}
+
               />
               <label>Length: {passwordLength}</label>
             </div>
